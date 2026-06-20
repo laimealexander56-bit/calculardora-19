@@ -81,6 +81,15 @@
   .copied { color: var(--success-text); font-size: 12px; margin-left: 8px; display:none; }
   .err { color: var(--danger-text); font-size: 12px; margin-top: 6px; display:none; }
   footer { text-align: center; font-size: 11px; color: var(--text-tertiary); margin-top: 1.5rem; }
+  .banner-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .banner-card {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    padding: 1.1rem 0.8rem; text-align: center;
+  }
+  .banner-dir { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+  .banner-rate { font-size: 28px; font-weight: 700; color: #f0b94d; line-height: 1.1; }
+  .banner-unit { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
+  .banner-updated { text-align: center; font-size: 11px; color: var(--text-tertiary); margin-bottom: 1rem; }
 </style>
 </head>
 <body>
@@ -90,6 +99,20 @@
     <h1>💸 Viruez Envíos</h1>
     <p>El mejor precio del mercado, calculado en tiempo real</p>
   </div>
+
+  <div class="banner-wrap">
+    <div class="banner-card">
+      <div class="banner-dir">🇨🇱 ➡️ 🇧🇴 Chile a Bolivia</div>
+      <div class="banner-rate" id="bannerCLP">—</div>
+      <div class="banner-unit">BOB por 1.000 CLP</div>
+    </div>
+    <div class="banner-card">
+      <div class="banner-dir">🇧🇴 ➡️ 🇨🇱 Bolivia a Chile</div>
+      <div class="banner-rate" id="bannerBOB">—</div>
+      <div class="banner-unit">CLP por 1 BOB</div>
+    </div>
+  </div>
+  <div class="banner-updated" id="bannerUpdated">Actualizado: —</div>
 
   <div class="gear"><button type="button" id="btnAdmin">⚙️ Panel del negocio</button></div>
 
@@ -153,14 +176,14 @@
           <div class="amount" id="bob_out">— BOB</div>
           <div class="rate-pill" id="rate_clpbob"></div>
         </div>
-        <div class="inv-section">
-          <div class="inv-label">¿Necesitas que llegue una cantidad exacta?</div>
-          <input type="text" inputmode="numeric" class="big-input" id="bob_target" placeholder="Bolivianos que necesita recibir">
-          <div id="res_inv_clp" style="display:none">
-            <div class="result">
-              <div class="label">Debes enviar desde Chile</div>
-              <div class="amount" id="clp_needed">— CLP</div>
-            </div>
+      </div>
+      <div class="inv-section">
+        <div class="inv-label">¿Necesitas que llegue una cantidad exacta?</div>
+        <input type="text" inputmode="numeric" class="big-input" id="bob_target" placeholder="Bolivianos que necesita recibir">
+        <div id="res_inv_clp" style="display:none">
+          <div class="result">
+            <div class="label">Debes enviar desde Chile</div>
+            <div class="amount" id="clp_needed">— CLP</div>
           </div>
         </div>
       </div>
@@ -177,14 +200,14 @@
           <div class="amount" id="clp_out">— CLP</div>
           <div class="rate-pill" id="rate_bobclp"></div>
         </div>
-        <div class="inv-section">
-          <div class="inv-label">¿Necesitas que llegue una cantidad exacta?</div>
-          <input type="text" inputmode="numeric" class="big-input" id="clp_target" placeholder="Pesos chilenos que necesita recibir">
-          <div id="res_inv_bob" style="display:none">
-            <div class="result">
-              <div class="label">Debes enviar desde Bolivia</div>
-              <div class="amount" id="bob_needed">— BOB</div>
-            </div>
+      </div>
+      <div class="inv-section">
+        <div class="inv-label">¿Necesitas que llegue una cantidad exacta?</div>
+        <input type="text" inputmode="numeric" class="big-input" id="clp_target" placeholder="Pesos chilenos que necesita recibir">
+        <div id="res_inv_bob" style="display:none">
+          <div class="result">
+            <div class="label">Debes enviar desde Bolivia</div>
+            <div class="amount" id="bob_needed">— BOB</div>
           </div>
         </div>
       </div>
@@ -299,9 +322,13 @@
   function generarTextoWA() {
     const fecha = numPlainText('fechaTxt');
     const r4 = tasaTramoCLP(4), r2 = tasaTramoCLP(2), r1 = tasaTramoCLP(1), r0 = tasaTramoCLP(0);
+    const b4 = tasaTramoBOB(4), b2 = tasaTramoBOB(2), b0 = tasaTramoBOB(0);
     const bobFor = (amount, rate) => Math.floor(amount / 1000 * rate).toLocaleString('es-BO');
+    const clpFor = (amount, rate) => Math.floor(amount * rate).toLocaleString('es-CL');
     const texto =
 `📈🚀 ACTUALIZACIÓN ENVÍOS 📊💵 ${fecha}
+
+🇨🇱➡️🇧🇴 ENVÍOS A BOLIVIA
 Montos de 1 millón arriba:
             ${toEmoji(r4.toFixed(2))}
 🇨🇱 1.000.000 = ${bobFor(1000000, r4)}Bs 🇧🇴
@@ -314,12 +341,38 @@ Montos de 50mil a 100mil:
             ${toEmoji(r1.toFixed(2))}
 🇨🇱 50.000 = ${bobFor(50000, r1)}Bs 🇧🇴
 
-Menores a 50mil a: ${r0.toFixed(2)}`;
+Menores a 50mil a: ${r0.toFixed(2)}
+
+🇧🇴➡️🇨🇱 ENVÍOS A CHILE
+Montos de 10.000 Bs arriba:
+            ${toEmoji(b4.toFixed(2))}
+🇧🇴 10.000 = $${clpFor(10000, b4)} 🇨🇱
+
+Montos de 1.000 a 10.000 Bs:
+            ${toEmoji(b2.toFixed(2))}
+🇧🇴 1.000 = $${clpFor(1000, b2)} 🇨🇱
+
+Menores a 1.000 Bs a: ${b0.toFixed(2)}`;
     setText('waOutput', texto);
+  }
+
+  function actualizarBanner() {
+    // Tramo representativo de cada dirección: el más usado en la práctica
+    // (100K-500K para CLP->BOB, 1K-5K BOB para BOB->CLP), igual que en el
+    // mensaje de WhatsApp.
+    const tasaCLP = tasaTramoCLP(2);
+    const tasaBOB = tasaTramoBOB(2);
+    setText('bannerCLP', tasaCLP.toFixed(2));
+    setText('bannerBOB', tasaBOB.toFixed(2));
+    const ahora = new Date();
+    const fechaStr = ahora.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const horaStr = ahora.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    setText('bannerUpdated', 'Actualizado: ' + fechaStr + ' a las ' + horaStr);
   }
 
   function recalcAll() {
     calcCLPtoBOB(); calcInversoCLP(); calcBOBtoCLP(); calcInversoBOB();
+    actualizarBanner();
     if (document.getElementById('adminPanel').classList.contains('show')) generarTextoWA();
   }
 
@@ -379,6 +432,8 @@ Menores a 50mil a: ${r0.toFixed(2)}`;
   }
   document.getElementById('tabClpBob').addEventListener('click', () => switchTab('clpbob'));
   document.getElementById('tabBobClp').addEventListener('click', () => switchTab('bobclp'));
+
+  actualizarBanner();
 })();
 </script>
 </body>
