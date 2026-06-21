@@ -1,0 +1,9 @@
+{
+  "name": "viruez-envios",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Calculadora + generador de contenido diario para Viruez Envíos (Chile -> Bolivia)",
+  "dependencies": {
+    "@upstash/redis": "^1.34.3"
+  }
+}

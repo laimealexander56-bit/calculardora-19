@@ -3,213 +3,206 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viruez Envíos — Calculadora</title>
+<title>Viruez Envíos</title>
 <style>
-  :root {
-    --bg: #0f1115;
-    --card-bg: #181b21;
-    --card-border: #2a2e37;
-    --secondary-bg: #1f232b;
-    --text-primary: #f2f3f5;
-    --text-secondary: #9aa1ad;
-    --text-tertiary: #6b7280;
-    --success-bg: #16301f;
-    --success-text: #4ade80;
-    --info-bg: #16243a;
-    --info-text: #60a5fa;
-    --danger-text: #f87171;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    padding: 1.5rem 1rem 3rem;
-  }
-  .wrap { max-width: 480px; margin: 0 auto; }
-  .brand { text-align: center; margin-bottom: 1rem; }
-  .brand h1 { font-size: 21px; font-weight: 600; color: var(--text-primary); }
-  .brand p { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
-  .gear { text-align: right; margin-bottom: 8px; }
-  .gear button { background: none; border: none; color: var(--text-secondary); font-size: 13px; cursor: pointer; padding: 6px; }
-  .admin-panel { background: var(--secondary-bg); border-radius: 10px; padding: 14px; margin-bottom: 1rem; display: none; }
-  .admin-panel.show { display: block; }
-  .admin-title { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; margin-top: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .admin-title:first-child { margin-top: 0; }
-  .grid4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
-  .grid5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; }
-  .field label { font-size: 10px; color: var(--text-secondary); display:block; margin-bottom:3px; line-height:1.3; }
-  .field input, .field textarea {
-    width: 100%; padding: 7px 7px; font-size: 13px; border: 1px solid var(--card-border);
-    border-radius: 6px; background: var(--bg); color: var(--text-primary);
-  }
-  .tabs { display: flex; gap: 8px; margin-bottom: 1rem; }
-  .tab {
-    flex: 1; padding: 11px; text-align: center; font-size: 14px; font-weight: 500;
-    border: 1px solid var(--card-border); border-radius: 8px; cursor: pointer;
-    color: var(--text-secondary); background: var(--card-bg);
-  }
-  .tab.active { background: var(--info-bg); color: var(--info-text); border-color: var(--info-text); }
-  .panel { display: none; }
-  .panel.active { display: block; }
-  .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 1.3rem; margin-bottom: 1rem; }
-  .big-input {
-    width: 100%; padding: 14px 16px; font-size: 22px; border: 1px solid var(--card-border);
-    border-radius: 10px; background: var(--secondary-bg); color: var(--text-primary); margin-bottom: 12px;
-  }
-  .result { background: var(--success-bg); border-radius: 10px; padding: 1.1rem; text-align: center; }
-  .result .label { font-size: 13px; color: var(--success-text); margin-bottom: 4px; }
-  .result .amount { font-size: 32px; font-weight: 700; color: var(--success-text); }
-  .rate-pill { display: inline-block; margin-top: 8px; background: var(--card-bg); color: var(--text-secondary); font-size: 12px; padding: 4px 11px; border-radius: 8px; }
-  .inv-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--card-border); }
-  .inv-label { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
-  .hint { text-align: center; font-size: 12px; color: var(--text-tertiary); margin-top: 6px; }
-  .lock-card { text-align: center; padding: 2.2rem 1.2rem; }
-  .lock-card input {
-    max-width: 220px; margin: 14px auto; text-align: center; padding: 11px; font-size: 16px;
-    border: 1px solid var(--card-border); border-radius: 8px; background: var(--bg); color: var(--text-primary); display: block;
-  }
-  .lock-card button {
-    background: var(--info-bg); color: var(--info-text); border: none; padding: 10px 20px;
-    border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;
-  }
-  .lock-warn { font-size: 12px; color: var(--text-tertiary); margin-top: 12px; max-width: 320px; margin-left: auto; margin-right: auto; }
-  .out-box {
-    background: var(--secondary-bg); border-radius: 8px; padding: 12px; white-space: pre-wrap;
-    font-family: monospace; font-size: 12px; color: var(--text-primary); line-height: 1.6; margin-top: 8px;
-  }
-  .copied { color: var(--success-text); font-size: 12px; margin-left: 8px; display:none; }
-  .err { color: var(--danger-text); font-size: 12px; margin-top: 6px; display:none; }
-  footer { text-align: center; font-size: 11px; color: var(--text-tertiary); margin-top: 1.5rem; }
-  .banner-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
-  .banner-card {
-    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
-    padding: 1.1rem 0.8rem; text-align: center;
-  }
-  .banner-dir { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
-  .banner-rate { font-size: 28px; font-weight: 700; color: #f0b94d; line-height: 1.1; }
-  .banner-unit { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
-  .banner-updated { text-align: center; font-size: 11px; color: var(--text-tertiary); margin-bottom: 1rem; }
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+* { box-sizing: border-box; }
+:root {
+  --bg: #060a14; --panel: #0e1526; --panel2: #121b30; --line: rgba(201,168,76,0.18);
+  --gold: #c9a84c; --gold-l: #e3c878; --gold-dim: rgba(201,168,76,0.14);
+  --ink: #f5f1e6; --muted: #838ca3; --muted2: #5b6276;
+  --ok-bg: #16301f; --ok-text: #4ade80; --warn-bg: #3a2a16; --warn-text: #f0b94d; --err-text: #f87171;
+}
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  background-image: radial-gradient(circle at 15% 0%, rgba(201,168,76,0.08), transparent 45%);
+  padding: 1.5rem 1rem 3rem;
+}
+.mono { font-family: 'DM Mono', monospace; }
+.wrap { max-width: 480px; margin: 0 auto; }
+.brand { text-align: center; margin-bottom: 1rem; }
+.brand h1 { font-size: 21px; font-weight: 700; margin: 0; }
+.brand h1 span { color: var(--gold-l); }
+.brand p { font-size: 12.5px; color: var(--muted); margin: 4px 0 0; font-family: 'DM Mono', monospace; }
+.gear { text-align: right; margin-bottom: 8px; }
+.gear button { background: none; border: none; color: var(--muted); font-size: 13px; cursor: pointer; padding: 6px; font-family: inherit; }
+
+.banner-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0.6rem; }
+.banner-card { background: var(--panel); border: 1px solid var(--gold); border-radius: 14px; padding: 1rem 0.7rem; text-align: center; }
+.banner-dir { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.banner-rate { font-size: 26px; font-weight: 700; color: var(--gold-l); font-family: 'DM Mono', monospace; }
+.banner-unit { font-size: 10.5px; color: var(--muted2); margin-top: 4px; }
+.banner-updated { text-align: center; font-size: 11px; color: var(--muted2); margin-bottom: 1.2rem; font-family: 'DM Mono', monospace; }
+
+.tabs { display: flex; gap: 8px; margin-bottom: 1rem; }
+.tab { flex: 1; padding: 11px; text-align: center; font-size: 14px; font-weight: 600; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; color: var(--muted); background: var(--panel); }
+.tab.active { background: var(--gold-dim); color: var(--gold-l); border-color: var(--gold); }
+.calc-panel { display: none; }
+.calc-panel.active { display: block; }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 1.3rem; margin-bottom: 1rem; }
+.card label { font-size: 14px; color: var(--muted); display: block; margin-bottom: 8px; }
+.big-input { width: 100%; padding: 14px 16px; font-size: 22px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel2); color: var(--ink); margin-bottom: 12px; font-family: 'DM Mono', monospace; }
+.result { background: var(--ok-bg); border-radius: 10px; padding: 1.1rem; text-align: center; display: none; }
+.result.show { display: block; }
+.result .l { font-size: 13px; color: var(--ok-text); margin-bottom: 4px; }
+.result .a { font-size: 30px; font-weight: 700; color: var(--ok-text); font-family: 'DM Mono', monospace; }
+
+footer { text-align: center; font-size: 11px; color: var(--muted2); margin-top: 1.5rem; font-family: 'DM Mono', monospace; }
+
+/* Admin */
+.lock-card { text-align: center; padding: 2rem 1.2rem; }
+.lock-card input { max-width: 220px; margin: 14px auto; text-align: center; padding: 11px; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel2); color: var(--ink); display: block; font-family: 'DM Mono', monospace; }
+.lock-card button { background: linear-gradient(135deg, var(--gold-l), var(--gold)); color: #1a1306; border: none; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.lock-warn { font-size: 11.5px; color: var(--muted2); margin-top: 10px; max-width: 320px; margin-left: auto; margin-right: auto; }
+.err-text { color: var(--err-text); font-size: 12.5px; margin-top: 8px; display: none; }
+
+.admin-panel { display: none; }
+.admin-panel.show { display: block; }
+.admin-title { font-size: 10.5px; color: var(--gold); margin: 18px 0 8px; text-transform: uppercase; letter-spacing: 1px; font-family: 'DM Mono', monospace; }
+.admin-title:first-child { margin-top: 0; }
+.grid5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; }
+.field label { font-size: 9.5px; color: var(--muted); display: block; margin-bottom: 3px; }
+.field input { width: 100%; padding: 7px; font-size: 13px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel2); color: var(--ink); font-family: 'DM Mono', monospace; }
+.save-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.btn-sm { background: var(--gold-dim); border: 1px solid var(--gold); color: var(--gold-l); padding: 8px 14px; border-radius: 8px; font-size: 12.5px; cursor: pointer; font-family: inherit; }
+.saved-msg { font-size: 11.5px; color: var(--ok-text); display: none; }
+
+/* Generator */
+.gen-types { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.gen-type-btn { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: var(--panel2); border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; color: var(--muted); font-size: 13px; cursor: pointer; font-family: inherit; }
+.gen-type-btn.active { border-color: var(--gold); background: var(--gold-dim); color: var(--ink); }
+.gen-generate { width: 100%; background: linear-gradient(135deg, var(--gold-l), var(--gold)); color: #1a1306; border: none; border-radius: 9px; padding: 13px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 6px; }
+.gen-generate:disabled { opacity: 0.5; cursor: progress; }
+.gen-status { margin-top: 10px; font-size: 11.5px; color: var(--muted); font-family: 'DM Mono', monospace; min-height: 16px; }
+.gen-status.error { color: var(--err-text); }
+
+.phone { width: 260px; aspect-ratio: 9/16; margin: 14px auto 10px; background: linear-gradient(180deg,#0a0f1f,#060a14 60%); border: 1px solid var(--line); border-radius: 24px; padding: 18px 14px; display: flex; flex-direction: column; }
+.phone .pname { text-align: center; font-weight: 700; font-size: 13px; }
+.phone .pname span { color: var(--gold-l); }
+.phone .pslogan { text-align: center; font-size: 8.5px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
+.phone .ptext { flex: 1; font-size: 11.5px; line-height: 1.5; white-space: pre-wrap; overflow-y: auto; color: var(--muted2); font-style: italic; }
+.phone .ptext.real { color: var(--ink); font-style: normal; }
+.copy-btn { display: block; margin: 0 auto; background: transparent; border: 1px solid var(--gold); color: var(--gold-l); border-radius: 8px; padding: 9px 18px; font-size: 12px; cursor: pointer; font-family: 'DM Mono', monospace; }
+.copy-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="brand">
-    <h1>💸 Viruez Envíos</h1>
-    <p>El mejor precio del mercado, calculado en tiempo real</p>
+    <h1>💸 Viruez <span>Envíos</span></h1>
+    <p>De Chile a Bolivia – Rápido y Seguro</p>
   </div>
 
   <div class="banner-wrap">
     <div class="banner-card">
-      <div class="banner-dir">🇨🇱 ➡️ 🇧🇴 Chile a Bolivia</div>
+      <div class="banner-dir">🇨🇱 ➡️ 🇧🇴</div>
       <div class="banner-rate" id="bannerCLP">—</div>
-      <div class="banner-unit">BOB por 1.000 CLP</div>
+      <div class="banner-unit">BOB por CLP (tramo medio)</div>
     </div>
     <div class="banner-card">
-      <div class="banner-dir">🇧🇴 ➡️ 🇨🇱 Bolivia a Chile</div>
+      <div class="banner-dir">🇧🇴 ➡️ 🇨🇱</div>
       <div class="banner-rate" id="bannerBOB">—</div>
-      <div class="banner-unit">CLP por 1 BOB</div>
+      <div class="banner-unit">CLP por BOB (tramo medio)</div>
     </div>
   </div>
-  <div class="banner-updated" id="bannerUpdated">Actualizado: —</div>
+  <div class="banner-updated" id="bannerUpdated">Cargando tasas…</div>
 
   <div class="gear"><button type="button" id="btnAdmin">⚙️ Panel del negocio</button></div>
 
+  <!-- LOGIN -->
   <div class="card lock-card" id="lockCard" style="display:none">
-    <div style="font-size:15px;color:var(--text-secondary)">🔒 Esta sección es solo para el administrador</div>
+    <div style="font-size:14px;color:var(--muted)">🔒 Esta sección es solo para el administrador</div>
     <input type="password" id="pwInput" placeholder="Contraseña">
     <div><button type="button" id="btnUnlock">Entrar</button></div>
-    <div class="err" id="pwErr">Contraseña incorrecta</div>
-    <div class="lock-warn">Esta contraseña frena a un cliente curioso, pero no es seguridad bancaria. Para protección real, conviene una versión con login de usuario.</div>
+    <div class="err-text" id="pwErr">Contraseña incorrecta</div>
+    <div class="lock-warn">La contraseña se valida en el servidor — a diferencia de la versión anterior, los márgenes y precios crudos nunca viajan al navegador hasta que entras correctamente.</div>
   </div>
 
+  <!-- ADMIN -->
   <div class="admin-panel" id="adminPanel">
-    <div class="admin-title">Precios reales Binance hoy (solo vos los ves)</div>
-    <div class="grid4">
-      <div class="field"><label>Compra USDT CLP</label><input type="number" id="compraCLP" value="914.00" step="0.01"></div>
-      <div class="field"><label>Venta USDT CLP</label><input type="number" id="ventaCLP" value="903.71" step="0.01"></div>
-      <div class="field"><label>Compra USDT BOB</label><input type="number" id="compraBOB" value="9.95" step="0.01"></div>
-      <div class="field"><label>Venta USDT BOB</label><input type="number" id="ventaBOB" value="9.89" step="0.01"></div>
+
+    <div class="card">
+      <div class="admin-title">Precios actuales (auto o manual)</div>
+      <div class="grid5" style="grid-template-columns: repeat(4,1fr)">
+        <div class="field"><label>Compra USDT CLP</label><input type="number" step="0.01" id="rawCompraCLP"></div>
+        <div class="field"><label>Venta USDT CLP</label><input type="number" step="0.01" id="rawVentaCLP"></div>
+        <div class="field"><label>Compra USDT BOB</label><input type="number" step="0.01" id="rawCompraBOB"></div>
+        <div class="field"><label>Venta USDT BOB</label><input type="number" step="0.01" id="rawVentaBOB"></div>
+      </div>
+      <div class="save-row">
+        <button class="btn-sm" id="btnSaveRates">Guardar precios manualmente</button>
+        <span class="saved-msg" id="savedRatesMsg">✅ Guardado</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted2);margin-top:8px">El cron diario sobrescribe esto automáticamente. Úsalo solo si Binance falla un día.</div>
+
+      <div class="admin-title">Piso de ganancia · 🇨🇱 envíos a Bolivia (BOB)</div>
+      <div class="grid5">
+        <div class="field"><label>10K–50K</label><input type="number" step="0.1" id="floorCLP_0"></div>
+        <div class="field"><label>50K–100K</label><input type="number" step="0.1" id="floorCLP_1"></div>
+        <div class="field"><label>100K–500K</label><input type="number" step="0.1" id="floorCLP_2"></div>
+        <div class="field"><label>500K–1M</label><input type="number" step="0.1" id="floorCLP_3"></div>
+        <div class="field"><label>1M+</label><input type="number" step="0.1" id="floorCLP_4"></div>
+      </div>
+
+      <div class="admin-title">Piso de ganancia · 🇧🇴 envíos a Chile (CLP)</div>
+      <div class="grid5">
+        <div class="field"><label>50–500</label><input type="number" step="1" id="floorBOB_0"></div>
+        <div class="field"><label>500–1K</label><input type="number" step="1" id="floorBOB_1"></div>
+        <div class="field"><label>1K–5K</label><input type="number" step="1" id="floorBOB_2"></div>
+        <div class="field"><label>5K–10K</label><input type="number" step="1" id="floorBOB_3"></div>
+        <div class="field"><label>10K+</label><input type="number" step="1" id="floorBOB_4"></div>
+      </div>
+      <div class="save-row">
+        <button class="btn-sm" id="btnSaveFloors">Guardar pisos</button>
+        <span class="saved-msg" id="savedFloorsMsg">✅ Guardado</span>
+      </div>
     </div>
 
-    <div class="admin-title">Piso de ganancia por tramo · 🇨🇱 envíos a Bolivia (en BOB)</div>
-    <div class="grid5">
-      <div class="field"><label>10K–50K</label><input type="number" id="floorCLP_0" value="3.50" step="0.1"></div>
-      <div class="field"><label>50K–100K</label><input type="number" id="floorCLP_1" value="10"></div>
-      <div class="field"><label>100K–500K</label><input type="number" id="floorCLP_2" value="10"></div>
-      <div class="field"><label>500K–1M</label><input type="number" id="floorCLP_3" value="10"></div>
-      <div class="field"><label>1M+</label><input type="number" id="floorCLP_4" value="10"></div>
-    </div>
+    <div class="card">
+      <div class="admin-title">⚽ Generador de contenido del día</div>
+      <div class="gen-types" id="genTypes"></div>
+      <div id="genWeeklyExtra" style="display:none;margin-bottom:10px">
+        <div class="field"><label>Tasa CL→BO hace 7 días (opcional)</label><input type="number" step="0.0001" id="genLastWeek"></div>
+      </div>
+      <button class="gen-generate" id="genBtn">⚽ Generar publicación</button>
+      <div class="gen-status" id="genStatus"></div>
 
-    <div class="admin-title">Piso de ganancia por tramo · 🇧🇴 envíos a Chile (en CLP)</div>
-    <div class="grid5">
-      <div class="field"><label>50–500</label><input type="number" id="floorBOB_0" value="150"></div>
-      <div class="field"><label>500–1K</label><input type="number" id="floorBOB_1" value="900"></div>
-      <div class="field"><label>1K–5K</label><input type="number" id="floorBOB_2" value="900"></div>
-      <div class="field"><label>5K–10K</label><input type="number" id="floorBOB_3" value="900"></div>
-      <div class="field"><label>10K+</label><input type="number" id="floorBOB_4" value="900"></div>
-    </div>
-
-    <div class="admin-title">Texto listo para WhatsApp</div>
-    <div class="field" style="margin-bottom:8px"><label>Fecha a mostrar</label><input type="text" id="fechaTxt" value="Viernes: 19/06/2026"></div>
-    <div class="out-box" id="waOutput"></div>
-    <div style="margin-top:8px">
-      <button type="button" id="btnCopiar" style="background:var(--info-bg);color:var(--info-text);border:none;padding:9px 16px;border-radius:8px;font-size:13px;cursor:pointer">Copiar texto</button>
-      <span class="copied" id="copiedMsg">¡Copiado!</span>
+      <div class="phone">
+        <div class="pname">VIRUEZ <span>ENVÍOS</span></div>
+        <div class="pslogan">De Chile a Bolivia – Rápido y Seguro</div>
+        <div class="ptext" id="genText">Tu publicación aparecerá aquí ⚽</div>
+      </div>
+      <button class="copy-btn" id="genCopyBtn" disabled>📋 Copiar texto</button>
     </div>
   </div>
 
+  <!-- PUBLIC CALCULATOR -->
   <div class="tabs">
-    <div class="tab active" id="tabClpBob">🇨🇱 Envío a Bolivia</div>
-    <div class="tab" id="tabBobClp">🇧🇴 Envío a Chile</div>
+    <div class="tab active" id="tabClBo">🇨🇱 Envío a Bolivia</div>
+    <div class="tab" id="tabBoCl">🇧🇴 Envío a Chile</div>
   </div>
 
-  <div id="panel-clpbob" class="panel active">
+  <div class="calc-panel active" id="panelClBo">
     <div class="card">
-      <label style="font-size:14px;color:var(--text-secondary);display:block;margin-bottom:8px">¿Cuántos pesos chilenos envías?</label>
-      <input type="text" inputmode="numeric" class="big-input" id="clp_in" placeholder="Ej: 100000">
-      <div class="hint">Montos entre 10.000 y 50.000.000 CLP</div>
-      <div id="res_clpbob" style="display:none">
-        <div class="result">
-          <div class="label">Tu familia recibe en Bolivia</div>
-          <div class="amount" id="bob_out">— BOB</div>
-          <div class="rate-pill" id="rate_clpbob"></div>
-        </div>
-      </div>
-      <div class="inv-section">
-        <div class="inv-label">¿Necesitas que llegue una cantidad exacta?</div>
-        <input type="text" inputmode="numeric" class="big-input" id="bob_target" placeholder="Bolivianos que necesita recibir">
-        <div id="res_inv_clp" style="display:none">
-          <div class="result">
-            <div class="label">Debes enviar desde Chile</div>
-            <div class="amount" id="clp_needed">— CLP</div>
-          </div>
-        </div>
+      <label>¿Cuántos pesos chilenos envías?</label>
+      <input type="text" inputmode="numeric" class="big-input" id="clpIn" placeholder="Ej: 100000">
+      <div class="result" id="resClp">
+        <div class="l">Tu familia recibe en Bolivia</div>
+        <div class="a" id="bobOut">— BOB</div>
       </div>
     </div>
   </div>
 
-  <div id="panel-bobclp" class="panel">
+  <div class="calc-panel" id="panelBoCl">
     <div class="card">
-      <label style="font-size:14px;color:var(--text-secondary);display:block;margin-bottom:8px">¿Cuántos bolivianos envías?</label>
-      <input type="text" inputmode="numeric" class="big-input" id="bob_in" placeholder="Ej: 1000">
-      <div id="res_bobclp" style="display:none">
-        <div class="result">
-          <div class="label">Tu familia recibe en Chile</div>
-          <div class="amount" id="clp_out">— CLP</div>
-          <div class="rate-pill" id="rate_bobclp"></div>
-        </div>
-      </div>
-      <div class="inv-section">
-        <div class="inv-label">¿Necesitas que llegue una cantidad exacta?</div>
-        <input type="text" inputmode="numeric" class="big-input" id="clp_target" placeholder="Pesos chilenos que necesita recibir">
-        <div id="res_inv_bob" style="display:none">
-          <div class="result">
-            <div class="label">Debes enviar desde Bolivia</div>
-            <div class="amount" id="bob_needed">— BOB</div>
-          </div>
-        </div>
+      <label>¿Cuántos bolivianos envías?</label>
+      <input type="text" inputmode="numeric" class="big-input" id="bobIn" placeholder="Ej: 1000">
+      <div class="result" id="resBob">
+        <div class="l">Tu familia recibe en Chile</div>
+        <div class="a" id="clpOut">— CLP</div>
       </div>
     </div>
   </div>
@@ -218,222 +211,204 @@
 </div>
 
 <script>
-(function() {
-  const PASSWORD = 'viruez2026';
+(function () {
+  const $ = (id) => document.getElementById(id);
+  let adminPassword = null;
+  let tramosCLP = [];
+  let tramosBOB = [];
 
-  const TRAMOS_CLP = [
-    { min: 10000,   max: 49999,    label: '10K – 50K CLP' },
-    { min: 50000,   max: 99999,    label: '50K – 100K CLP' },
-    { min: 100000,  max: 499999,   label: '100K – 500K CLP' },
-    { min: 500000,  max: 999999,   label: '500K – 1M CLP' },
-    { min: 1000000, max: Infinity, label: '1M+ CLP' },
-  ];
-  const TRAMOS_BOB = [
-    { min: 50,    max: 499,     label: '50 – 500 BOB' },
-    { min: 500,   max: 999,     label: '500 – 1.000 BOB' },
-    { min: 1000,  max: 4999,    label: '1.000 – 5.000 BOB' },
-    { min: 5000,  max: 9999,    label: '5.000 – 10.000 BOB' },
-    { min: 10000, max: Infinity, label: '10.000+ BOB' },
-  ];
-  const DIGIT_EMOJI = {'0':'0️⃣','1':'1️⃣','2':'2️⃣','3':'3️⃣','4':'4️⃣','5':'5️⃣','6':'6️⃣','7':'7️⃣','8':'8️⃣','9':'9️⃣','.':'▪️'};
-  function toEmoji(s) { return s.split('').map(c => DIGIT_EMOJI[c] || c).join(''); }
-
-  function numAmount(id) {
-    const el = document.getElementById(id);
-    if (!el) return NaN;
-    const clean = String(el.value).replace(/[^\d]/g, '');
-    return clean ? parseInt(clean, 10) : NaN;
-  }
-  function numPlain(id) {
-    const el = document.getElementById(id);
-    if (!el) return NaN;
-    return parseFloat(el.value);
-  }
-
-  function getRaw() {
-    const compraCLP = numPlain('compraCLP');
-    const ventaCLP = numPlain('ventaCLP');
-    const compraBOB = numPlain('compraBOB');
-    const ventaBOB = numPlain('ventaBOB');
-    return {
-      rawCLPtoBOB: (ventaBOB / compraCLP) * 1000,
-      rawBOBtoCLP: ventaCLP / compraBOB
-    };
-  }
-
-  function tasaTramoCLP(i) {
-    const floor = numPlain('floorCLP_' + i) || 0;
-    return getRaw().rawCLPtoBOB - (floor * 1000 / TRAMOS_CLP[i].min);
-  }
-  function tasaTramoBOB(i) {
-    const floor = numPlain('floorBOB_' + i) || 0;
-    return getRaw().rawBOBtoCLP - (floor / TRAMOS_BOB[i].min);
-  }
-  function tramoIndex(monto, tramos) {
-    return tramos.findIndex(t => monto >= t.min && monto <= t.max);
-  }
-  function fmtDown(n) { return Math.floor(n).toLocaleString('es-CL'); }
-  function fmtUp(n) { return Math.ceil(n).toLocaleString('es-CL'); }
-  function show(id) { const e = document.getElementById(id); if (e) e.style.display = 'block'; }
-  function hide(id) { const e = document.getElementById(id); if (e) e.style.display = 'none'; }
-  function setText(id, t) { const e = document.getElementById(id); if (e) e.textContent = t; }
-
-  function calcCLPtoBOB() {
-    const clp = numAmount('clp_in');
-    if (!clp || clp < 10000) { hide('res_clpbob'); return; }
-    const idx = tramoIndex(clp, TRAMOS_CLP);
-    if (idx === -1) { hide('res_clpbob'); return; }
-    const tasa = tasaTramoCLP(idx);
-    setText('bob_out', fmtDown(clp / 1000 * tasa) + ' BOB');
-    setText('rate_clpbob', 'Tasa: ' + tasa.toFixed(2) + ' · ' + TRAMOS_CLP[idx].label);
-    show('res_clpbob');
-  }
-  function calcInversoCLP() {
-    const bobTarget = numAmount('bob_target');
-    if (!bobTarget || bobTarget <= 0) { hide('res_inv_clp'); return; }
-    const idx = Math.max(0, tramoIndex(bobTarget / getRaw().rawCLPtoBOB * 1000, TRAMOS_CLP));
-    const tasa = tasaTramoCLP(idx);
-    setText('clp_needed', '$' + fmtUp(bobTarget / tasa * 1000) + ' CLP');
-    show('res_inv_clp');
-  }
-  function calcBOBtoCLP() {
-    const bob = numAmount('bob_in');
-    if (!bob || bob < 50) { hide('res_bobclp'); return; }
-    const idx = tramoIndex(bob, TRAMOS_BOB);
-    if (idx === -1) { hide('res_bobclp'); return; }
-    const tasa = tasaTramoBOB(idx);
-    setText('clp_out', '$' + fmtDown(bob * tasa) + ' CLP');
-    setText('rate_bobclp', 'Tasa: ' + tasa.toFixed(2) + ' · ' + TRAMOS_BOB[idx].label);
-    show('res_bobclp');
-  }
-  function calcInversoBOB() {
-    const clpTarget = numAmount('clp_target');
-    if (!clpTarget || clpTarget <= 0) { hide('res_inv_bob'); return; }
-    const idx = Math.max(0, tramoIndex(clpTarget / getRaw().rawBOBtoCLP, TRAMOS_BOB));
-    const tasa = tasaTramoBOB(idx);
-    setText('bob_needed', fmtUp(clpTarget / tasa) + ' BOB');
-    show('res_inv_bob');
-  }
-
-  function numPlainText(id) {
-    const el = document.getElementById(id);
-    return el ? el.value : '';
-  }
-  function generarTextoWA() {
-    const fecha = numPlainText('fechaTxt');
-    const r4 = tasaTramoCLP(4), r2 = tasaTramoCLP(2), r1 = tasaTramoCLP(1), r0 = tasaTramoCLP(0);
-    const b4 = tasaTramoBOB(4), b2 = tasaTramoBOB(2), b0 = tasaTramoBOB(0);
-    const bobFor = (amount, rate) => Math.floor(amount / 1000 * rate).toLocaleString('es-BO');
-    const clpFor = (amount, rate) => Math.floor(amount * rate).toLocaleString('es-CL');
-    const texto =
-`📈🚀 ACTUALIZACIÓN ENVÍOS 📊💵 ${fecha}
-
-🇨🇱➡️🇧🇴 ENVÍOS A BOLIVIA
-Montos de 1 millón arriba:
-            ${toEmoji(r4.toFixed(2))}
-🇨🇱 1.000.000 = ${bobFor(1000000, r4)}Bs 🇧🇴
-
-Montos de 100mil a 1 millón:
-            ${toEmoji(r2.toFixed(2))}
-🇨🇱 100.000 = ${bobFor(100000, r2)}Bs 🇧🇴
-
-Montos de 50mil a 100mil:
-            ${toEmoji(r1.toFixed(2))}
-🇨🇱 50.000 = ${bobFor(50000, r1)}Bs 🇧🇴
-
-Menores a 50mil a: ${r0.toFixed(2)}
-
-🇧🇴➡️🇨🇱 ENVÍOS A CHILE
-Montos de 10.000 Bs arriba:
-            ${toEmoji(b4.toFixed(2))}
-🇧🇴 10.000 = $${clpFor(10000, b4)} 🇨🇱
-
-Montos de 1.000 a 10.000 Bs:
-            ${toEmoji(b2.toFixed(2))}
-🇧🇴 1.000 = $${clpFor(1000, b2)} 🇨🇱
-
-Menores a 1.000 Bs a: ${b0.toFixed(2)}`;
-    setText('waOutput', texto);
-  }
-
-  function actualizarBanner() {
-    // Tramo representativo de cada dirección: el más usado en la práctica
-    // (100K-500K para CLP->BOB, 1K-5K BOB para BOB->CLP), igual que en el
-    // mensaje de WhatsApp.
-    const tasaCLP = tasaTramoCLP(2);
-    const tasaBOB = tasaTramoBOB(2);
-    setText('bannerCLP', tasaCLP.toFixed(2));
-    setText('bannerBOB', tasaBOB.toFixed(2));
-    const ahora = new Date();
-    const fechaStr = ahora.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    const horaStr = ahora.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
-    setText('bannerUpdated', 'Actualizado: ' + fechaStr + ' a las ' + horaStr);
-  }
-
-  function recalcAll() {
-    calcCLPtoBOB(); calcInversoCLP(); calcBOBtoCLP(); calcInversoBOB();
-    actualizarBanner();
-    if (document.getElementById('adminPanel').classList.contains('show')) generarTextoWA();
-  }
-
-  function bind(id, fn) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    ['input', 'keyup', 'change', 'paste'].forEach(ev => el.addEventListener(ev, fn));
-  }
-  bind('clp_in', calcCLPtoBOB);
-  bind('bob_target', calcInversoCLP);
-  bind('bob_in', calcBOBtoCLP);
-  bind('clp_target', calcInversoBOB);
-  ['compraCLP','ventaCLP','compraBOB','ventaBOB',
-   'floorCLP_0','floorCLP_1','floorCLP_2','floorCLP_3','floorCLP_4',
-   'floorBOB_0','floorBOB_1','floorBOB_2','floorBOB_3','floorBOB_4','fechaTxt'
-  ].forEach(id => bind(id, recalcAll));
-
-  document.getElementById('btnAdmin').addEventListener('click', function() {
-    const unlocked = document.getElementById('adminPanel').classList.contains('show');
-    if (unlocked) {
-      document.getElementById('adminPanel').classList.remove('show');
-      return;
-    }
-    document.getElementById('lockCard').style.display = 'block';
-    document.getElementById('pwInput').focus();
-  });
-
-  function tryUnlock() {
-    const pw = document.getElementById('pwInput').value;
-    if (pw === PASSWORD) {
-      document.getElementById('lockCard').style.display = 'none';
-      document.getElementById('pwErr').style.display = 'none';
-      document.getElementById('pwInput').value = '';
-      document.getElementById('adminPanel').classList.add('show');
-      generarTextoWA();
-    } else {
-      document.getElementById('pwErr').style.display = 'block';
+  // ---------- Tasas públicas ----------
+  async function loadTasas() {
+    try {
+      const r = await fetch('/api/tasas');
+      const data = await r.json();
+      if (!data.ok) {
+        $('bannerUpdated').textContent = data.error || 'Sin datos todavía.';
+        return;
+      }
+      tramosCLP = data.tramosCLP;
+      tramosBOB = data.tramosBOB;
+      $('bannerCLP').textContent = data.bannerClBo.toFixed(2);
+      $('bannerBOB').textContent = data.bannerBoCl.toFixed(2);
+      const d = new Date(data.updatedAt);
+      $('bannerUpdated').textContent =
+        'Actualizado: ' + d.toLocaleDateString('es-CL') + ' ' + d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }) +
+        (data.source === 'manual' ? ' (manual)' : ' (auto)');
+      calcAll();
+    } catch (e) {
+      $('bannerUpdated').textContent = 'No se pudieron cargar las tasas.';
     }
   }
-  document.getElementById('btnUnlock').addEventListener('click', tryUnlock);
-  document.getElementById('pwInput').addEventListener('keyup', function(e) { if (e.key === 'Enter') tryUnlock(); });
 
-  document.getElementById('btnCopiar').addEventListener('click', function() {
-    const text = document.getElementById('waOutput').textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      const msg = document.getElementById('copiedMsg');
-      msg.style.display = 'inline';
-      setTimeout(() => msg.style.display = 'none', 2000);
-    });
-  });
+  function fmt(n) { return Math.floor(n).toLocaleString('es-CL'); }
+
+  function calcAll() {
+    const clean = (v) => v.replace(/[^\d]/g, '');
+    const clp = parseInt(clean($('clpIn').value), 10);
+    if (clp && clp >= 10000 && tramosCLP.length) {
+      const t = tramosCLP.find((x) => clp >= x.min && (x.max === null || clp <= x.max));
+      if (t) {
+        $('bobOut').textContent = fmt((clp / 1000) * t.tasa) + ' BOB';
+        $('resClp').classList.add('show');
+      }
+    } else { $('resClp').classList.remove('show'); }
+
+    const bob = parseInt(clean($('bobIn').value), 10);
+    if (bob && bob >= 50 && tramosBOB.length) {
+      const t = tramosBOB.find((x) => bob >= x.min && (x.max === null || bob <= x.max));
+      if (t) {
+        $('clpOut').textContent = '$' + fmt(bob * t.tasa) + ' CLP';
+        $('resBob').classList.add('show');
+      }
+    } else { $('resBob').classList.remove('show'); }
+  }
+  $('clpIn').addEventListener('input', calcAll);
+  $('bobIn').addEventListener('input', calcAll);
 
   function switchTab(which) {
-    document.getElementById('tabClpBob').classList.toggle('active', which === 'clpbob');
-    document.getElementById('tabBobClp').classList.toggle('active', which === 'bobclp');
-    document.getElementById('panel-clpbob').classList.toggle('active', which === 'clpbob');
-    document.getElementById('panel-bobclp').classList.toggle('active', which === 'bobclp');
+    $('tabClBo').classList.toggle('active', which === 'clbo');
+    $('tabBoCl').classList.toggle('active', which === 'bocl');
+    $('panelClBo').classList.toggle('active', which === 'clbo');
+    $('panelBoCl').classList.toggle('active', which === 'bocl');
   }
-  document.getElementById('tabClpBob').addEventListener('click', () => switchTab('clpbob'));
-  document.getElementById('tabBobClp').addEventListener('click', () => switchTab('bobclp'));
+  $('tabClBo').addEventListener('click', () => switchTab('clbo'));
+  $('tabBoCl').addEventListener('click', () => switchTab('bocl'));
 
-  actualizarBanner();
+  // ---------- Admin ----------
+  $('btnAdmin').addEventListener('click', () => {
+    if ($('adminPanel').classList.contains('show')) {
+      $('adminPanel').classList.remove('show');
+      return;
+    }
+    $('lockCard').style.display = 'block';
+    $('pwInput').focus();
+  });
+
+  async function tryUnlock() {
+    const pw = $('pwInput').value;
+    try {
+      const r = await fetch('/api/admin-tasas', { headers: { 'x-admin-password': pw } });
+      if (!r.ok) throw new Error();
+      const data = await r.json();
+      adminPassword = pw;
+      $('lockCard').style.display = 'none';
+      $('pwErr').style.display = 'none';
+      $('pwInput').value = '';
+      $('adminPanel').classList.add('show');
+      fillAdminFields(data);
+    } catch {
+      $('pwErr').style.display = 'block';
+    }
+  }
+  $('btnUnlock').addEventListener('click', tryUnlock);
+  $('pwInput').addEventListener('keyup', (e) => { if (e.key === 'Enter') tryUnlock(); });
+
+  function fillAdminFields(data) {
+    if (data.raw) {
+      $('rawCompraCLP').value = data.rates.compraCLP;
+      $('rawVentaCLP').value = data.rates.ventaCLP;
+      $('rawCompraBOB').value = data.rates.compraBOB;
+      $('rawVentaBOB').value = data.rates.ventaBOB;
+    }
+    const f = data.floors;
+    f.clp.forEach((v, i) => { $('floorCLP_' + i).value = v; });
+    f.bob.forEach((v, i) => { $('floorBOB_' + i).value = v; });
+  }
+
+  $('btnSaveRates').addEventListener('click', async () => {
+    const rates = {
+      compraCLP: parseFloat($('rawCompraCLP').value),
+      ventaCLP: parseFloat($('rawVentaCLP').value),
+      compraBOB: parseFloat($('rawCompraBOB').value),
+      ventaBOB: parseFloat($('rawVentaBOB').value),
+    };
+    await fetch('/api/admin-tasas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': adminPassword },
+      body: JSON.stringify({ rates }),
+    });
+    $('savedRatesMsg').style.display = 'inline';
+    setTimeout(() => $('savedRatesMsg').style.display = 'none', 1800);
+    loadTasas();
+  });
+
+  $('btnSaveFloors').addEventListener('click', async () => {
+    const clp = [0, 1, 2, 3, 4].map((i) => parseFloat($('floorCLP_' + i).value) || 0);
+    const bob = [0, 1, 2, 3, 4].map((i) => parseFloat($('floorBOB_' + i).value) || 0);
+    await fetch('/api/admin-tasas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': adminPassword },
+      body: JSON.stringify({ floors: { clp, bob } }),
+    });
+    $('savedFloorsMsg').style.display = 'inline';
+    setTimeout(() => $('savedFloorsMsg').style.display = 'none', 1800);
+    loadTasas();
+  });
+
+  // ---------- Generador ----------
+  const POST_TYPES = [
+    { id: 'rate', icon: '📊', label: 'Solo tipo de cambio' },
+    { id: 'news', icon: '📰', label: 'Cambio + mini noticia' },
+    { id: 'tip', icon: '💡', label: 'Cambio + tip financiero' },
+    { id: 'weekly', icon: '📋', label: 'Resumen semanal' },
+  ];
+  let genSelected = 'rate';
+  let genLastText = '';
+
+  function renderGenTypes() {
+    const el = $('genTypes');
+    el.innerHTML = '';
+    POST_TYPES.forEach((t) => {
+      const btn = document.createElement('button');
+      btn.className = 'gen-type-btn' + (genSelected === t.id ? ' active' : '');
+      btn.innerHTML = `<span>${t.icon}</span><span>${t.label}</span>`;
+      btn.addEventListener('click', () => {
+        genSelected = t.id;
+        renderGenTypes();
+        $('genWeeklyExtra').style.display = t.id === 'weekly' ? 'block' : 'none';
+      });
+      el.appendChild(btn);
+    });
+  }
+  renderGenTypes();
+
+  $('genBtn').addEventListener('click', async () => {
+    $('genBtn').disabled = true;
+    $('genStatus').textContent = 'Generando' + (genSelected === 'news' ? ' (buscando noticia)…' : '…');
+    $('genStatus').classList.remove('error');
+    try {
+      const r = await fetch('/api/generar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: genSelected,
+          lastWeekRate: $('genLastWeek').value ? parseFloat($('genLastWeek').value) : undefined,
+        }),
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error || 'Error desconocido');
+      genLastText = data.text;
+      $('genText').textContent = data.text;
+      $('genText').classList.add('real');
+      $('genCopyBtn').disabled = false;
+      $('genStatus').textContent = 'Listo ⚽';
+    } catch (e) {
+      $('genStatus').textContent = e.message || 'No se pudo generar.';
+      $('genStatus').classList.add('error');
+    } finally {
+      $('genBtn').disabled = false;
+    }
+  });
+
+  $('genCopyBtn').addEventListener('click', async () => {
+    if (!genLastText) return;
+    await navigator.clipboard.writeText(genLastText);
+    const orig = $('genCopyBtn').textContent;
+    $('genCopyBtn').textContent = '✅ Copiado';
+    setTimeout(() => $('genCopyBtn').textContent = orig, 1500);
+  });
+
+  loadTasas();
 })();
 </script>
 </body>
